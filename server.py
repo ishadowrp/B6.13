@@ -35,14 +35,18 @@ def add_new_data():
     """
     try: 
         new_data["year"] = int(new_data["year"])
-        """
-        Проверка на предмет дублирования данных в БД
-        """
-        if album.check_album(new_data):
-            result = album.add(new_data)
-        else:    
-            message = "Запись с таким альбомом уже существует!"
-            result = HTTPError(409, message)
+        if new_data["year"] >= 1000 and new_data["year"]<=2020:
+            """
+            Проверка на предмет дублирования данных в БД
+            """
+            if album.check_album(new_data):
+                result = album.add(new_data)
+            else:    
+                message = "Запись с таким альбомом уже существует!"
+                result = HTTPError(409, message)
+        else:
+            message = "Неверный тип данных в запросе: проверьте значение поля 'year'"
+            result = HTTPError(400, message)
     except ValueError:
         message = "Неверный тип данных в запросе: проверьте значение поля 'year'"
         result = HTTPError(400, message)
