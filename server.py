@@ -33,7 +33,8 @@ def add_new_data():
     """
     Валидация года на предмет правильного типа данных
     """
-    if type(new_data["year"]) is int:
+    try: 
+        new_data["year"] = int(new_data["year"])
         """
         Проверка на предмет дублирования данных в БД
         """
@@ -42,8 +43,9 @@ def add_new_data():
         else:    
             message = "Запись с таким альбомом уже существует!"
             result = HTTPError(409, message)
-    else:
-        result = HTTPError(400, "Некорректные параметры")
+    except ValueError:
+        message = "Неверный тип данных в запросе: проверьте значение поля 'year'"
+        result = HTTPError(400, message)
 
     return result
 
